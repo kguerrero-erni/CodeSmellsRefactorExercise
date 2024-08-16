@@ -45,6 +45,8 @@
 			}
 
 			Console.WriteLine("Program finished.");
+
+			// Added comment for test commit.
 		}
 	}
 }
