@@ -8,7 +8,12 @@ public class InputService : IInputService
     public string GetInput()
     {
         Console.WriteLine("Enter numbers separated by spaces:");
-        string input = Console.ReadLine() ?? throw new ArgumentException("Error: No input was entered");
+        string input = Console.ReadLine() ?? string.Empty;
+
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentException("Error: Input is empty");
+        }
 
         return input;
     }

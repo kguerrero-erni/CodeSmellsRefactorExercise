@@ -22,6 +22,7 @@ public class Calculator : ICalculator
         Console.WriteLine($"Average: {Average(Sum(numbers), numbers.Count)}");
 
     }
+
     public double Sum(List<double> numbers)
     {
         if (numbers.Count == 0)
