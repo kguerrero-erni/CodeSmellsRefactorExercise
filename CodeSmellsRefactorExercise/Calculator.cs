@@ -41,7 +41,7 @@ public class Calculator : ICalculator
         }
         catch(Exception ex)
         {
-            Console.WriteLine("ERROR: " + ex.Message);
+            Console.WriteLine(ex.Message);
         }
         finally
         {
