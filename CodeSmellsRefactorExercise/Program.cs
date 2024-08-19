@@ -1,50 +1,29 @@
-﻿namespace CodeSmellsRefactorExercise
+﻿using System.Diagnostics.CodeAnalysis;
+using CodeSmellsRefactorExercise.Models;
+
+namespace CodeSmellsRefactorExercise
 {
 	internal class Program
 	{
 		static void Main(string[] args)
 		{
-			var calculator = new Calculator();
-			calculator.Run();
-		}
-	}
+			var inputReader = new InputReader();
+			var formatter = new Formatter();
+			var calculator = new Calculator(inputReader, formatter);
 
-	public class Calculator
-	{
-		private List<int> numbers = new List<int>();
-
-		public void Run()
-		{
-			Console.WriteLine("Enter numbers separated by spaces:");
-			var input = Console.ReadLine();
-
-			if (string.IsNullOrEmpty(input))
+			try
 			{
-				Console.WriteLine("No input provided.");
-				return;
+				calculator.RunCalculator();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+			finally
+			{
+				Console.WriteLine("Program finished.");
 			}
 
-			var numList = input.Split(' ');
-			foreach (var n in numList)
-			{
-				numbers.Add(int.Parse(n));
-			}
-
-			var sum = 0;
-			foreach (var number in numbers)
-			{
-				sum += number;
-			}
-
-			var average = sum / numbers.Count;
-
-			if (numbers.Count > 0 && sum > 0 && average > 0)
-			{
-				Console.WriteLine($"Sum: {sum}");
-				Console.WriteLine($"Average: {average}");
-			}
-
-			Console.WriteLine("Program finished.");
 		}
 	}
 }
