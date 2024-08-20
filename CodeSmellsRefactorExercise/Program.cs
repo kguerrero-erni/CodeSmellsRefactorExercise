@@ -2,49 +2,60 @@
 {
 	internal class Program
 	{
-		static void Main(string[] args)
+        public static IList<double> InputProvider(string input, IInputDataConverter inputDataConverter)
+        {
+            // IList<double> numList = _inputConverter.StringToDoubleList(input);
+
+            // can be its own error
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new EmptyInputException("No Input Provided");
+            }
+            try
+            {
+                return inputDataConverter.StringToDoubleList(input);
+            }
+            catch (InvalidInputException ex)
+            {
+                throw new InvalidInputException("Invalid Input or Format", ex);
+            }
+        }
+
+        static void Main(string[] args)
 		{
-			var calculator = new Calculator();
-			calculator.Run();
-		}
+			IOperations operations = new Operations();
+            IInputDataConverter inputDataConverter = new InputDataConverter();
+
+            // add error handling here
+            Console.WriteLine("Enter numList separated by spaces:");
+            string input = Console.ReadLine();
+
+            try
+            {
+                IList<double> numList = InputProvider(input, inputDataConverter);
+
+                // use an interface
+                var calculator = new Calculator(operations);
+                calculator.RunCalculation(numList);
+            }
+            catch (InvalidInputException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            catch (EmptyInputException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            catch (OutputIsZeroException ex)
+            {
+                Console.WriteLine($"Notable Result: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 	}
 
-	public class Calculator
-	{
-		private List<int> numbers = new List<int>();
 
-		public void Run()
-		{
-			Console.WriteLine("Enter numbers separated by spaces:");
-			var input = Console.ReadLine();
-
-			if (string.IsNullOrEmpty(input))
-			{
-				Console.WriteLine("No input provided.");
-				return;
-			}
-
-			var numList = input.Split(' ');
-			foreach (var n in numList)
-			{
-				numbers.Add(int.Parse(n));
-			}
-
-			var sum = 0;
-			foreach (var number in numbers)
-			{
-				sum += number;
-			}
-
-			var average = sum / numbers.Count;
-
-			if (numbers.Count > 0 && sum > 0 && average > 0)
-			{
-				Console.WriteLine($"Sum: {sum}");
-				Console.WriteLine($"Average: {average}");
-			}
-
-			Console.WriteLine("Program finished.");
-		}
-	}
 }
